@@ -1,138 +1,146 @@
 ---
 name: openclaw-diary
+version: 1.0.0
 description: |
-  设置和管理 OpenClaw 自动学习日记。用于：
-  (1) 帮助用户 fork OpenClaw-Diary 仓库
-  (2) 将 fork 的仓库连接到 OpenClaw
-  (3) 配置每日定时任务自动写日记
-  (4) 部署到 GitHub Pages
+  Set up and manage OpenClaw auto learning diary. Used for:
+  (1) Help users fork OpenClaw-Diary repository
+  (2) Connect the forked repo to OpenClaw
+  (3) Configure daily cron task to auto-write diary
+  (4) Deploy to GitHub Pages
 ---
 
-# 🦞 OpenClaw-Diary 操作指南
+# 🦞 OpenClaw-Diary Setup Guide
 
-帮助用户设置 OpenClaw 自动学习日记的完整流程。
+Help users set up OpenClaw auto learning diary with this complete workflow.
 
-## 触发条件
+## ⚠️ Important: Language Response
 
-当用户提到以下内容时激活：
-- "设置日记" / "setup diary"
+**Always respond in the same language as the user is speaking!**
+- If user writes in Chinese → respond in Chinese
+- If user writes in English → respond in English
+- Detect language from user's message and match it
+
+## Trigger Conditions
+
+Activate when user mentions:
+- "setup diary" / "设置日记"
 - "fork OpenClaw-Diary"
-- "自动写日记" / "auto write diary"
-- "每日学习记录"
-- "让 AI 写日记"
+- "auto write diary" / "自动写日记"
+- "daily learning log" / "每日学习记录"
+- "let AI write diary" / "让 AI 写日记"
 
-## 完整操作流程
+## Complete Workflow
 
-### 步骤 1: 引导用户 Fork 仓库
+### Step 1: Guide User to Fork the Repo
 
-告诉用户去 GitHub fork 仓库：
+Tell user to fork on GitHub:
 
 ```
-请先 fork 仓库：
-1. 访问 https://github.com/YAI-Lab/OpenClaw-Diary
-2. 点击右上角 "Fork" 按钮
-3. 选择你的账号，完成 fork
+Please fork the repo:
+1. Visit https://github.com/YAI-Lab/OpenClaw-Diary
+2. Click "Fork" button
+3. Select your account, complete fork
 ```
 
-### 步骤 2: 获取用户 Fork 的 URL
+### Step 2: Get User's Fork URL
 
-询问用户 fork 后的仓库地址，格式如：
+Ask for the forked repo URL, format:
 ```
-https://github.com/你的用户名/OpenClaw-Diary
+https://github.com/your-username/OpenClaw-Diary
 ```
 
-### 步骤 3: 修改 index.html 个性化内容（重要！）
+### Step 3: Modify index.html for Personalization (IMPORTANT!)
 
-**克隆仓库后，必须修改以下内容：**
+**After cloning the repo, MUST modify:**
 
-1. **修改页面标题**：把 OpenClaw-Diary 改成用户想要的名字
-2. **替换机器人 Logo**：所有 🤖 改成 🦞
-3. **修改机器人名称**：替换为用户的机器人名字
+1. **Change page title**: Replace OpenClaw-Diary with user's desired name
+2. **Replace robot Logo**: Change 🤖 to 🦞
+3. **Change robot name**: Replace with user's robot name
 
 ```bash
-# 克隆仓库
-git clone https://github.com/用户名/OpenClaw-Diary.git
+# Clone repo
+git clone https://github.com/username/OpenClaw-Diary.git
 cd OpenClaw-Diary
 
-# 替换机器人名称（根据用户输入）
-sed -i 's/OpenClaw/你的机器人名字/g' index.html
+# Replace robot name (based on user input)
+sed -i 's/OpenClaw/YourRobotName/g' index.html
 
-# 替换 emoji
+# Replace emoji
 sed -i 's/🤖/🦞/g' index.html
 ```
 
-**示例修改：**
+**Example modification:**
 ```html
-<!-- 修改前 -->
+<!-- Before -->
 <title>OpenClaw-Diary</title>
-<h1>🤖 OpenClaw 的学习日记</h1>
+<h1>🤖 OpenClaw's Learning Diary</h1>
 
-<!-- 修改后 -->
-<title>小龙日记</title>
+<!-- After -->
+<title>MyAI Diary</title>
 <h1>🦞 小龙的学习日记</h1>
 ```
 
-### 步骤 4: 获取 GitHub Token
+### Step 4: Get GitHub Token
 
-如果没有配置 GitHub token，需要用户创建：
+If GitHub token not configured, user needs to create:
 
-1. 访问 https://github.com/settings/tokens
-2. 点击 "Generate new token (classic)"
-3. 勾选 `repo` 权限
-4. 生成并保存 token
+1. Visit https://github.com/settings/tokens
+2. Click "Generate new token (classic)"
+3. Check `repo` permission
+4. Generate and save token
 
-**重要**：获取 token 时必须告知用户用途，并说明如何撤销。
+**Important**: Must tell user the purpose when getting token, and how to revoke.
 
-### 步骤 5: 配置每日定时任务
+### Step 5: Configure Daily Cron Task
 
-使用 cron 或 heartbeat 配置每日任务：
+Use cron or heartbeat to configure daily task:
 
-**方式 A: Cron 定时任务**
+**Method A: Cron Task**
 ```bash
-# 每天 UTC 1:00 (北京时间 9:00) 执行
-openclaw cron add "0 1 * * *" "每日学习日记" "读取AI领域最新进展，生成中文报告并提交到 OpenClaw-Diary 仓库"
+# Run daily at UTC 1:00 (9:00 Beijing time)
+openclaw cron add "0 1 * * *" "Daily Learning Diary" "Read latest AI news, generate Chinese report and push to OpenClaw-Diary repo"
 ```
 
-**方式 B: Heartbeat 任务**
-在 HEARTBEAT.md 添加：
+**Method B: Heartbeat Task**
+Add to HEARTBEAT.md:
 ```markdown
-## 每日学习报告
-- 调研 AI/科技/政治最新进展
-- 生成中文报告
-- 推送到 OpenClaw-Diary
+## Daily Learning Report
+- Research latest AI/tech/politics news
+- Generate report in user's language
+- Push to OpenClaw-Diary
 ```
 
-### 步骤 6: 推送到仓库
+### Step 6: Push to Repo
 
 ```bash
-# 添加远程仓库
-git remote add user https://github.com/用户名/OpenClaw-Diary.git
+# Add remote
+git remote add user https://github.com/username/OpenClaw-Diary.git
 
-# 提交更改
+# Commit changes
 git add index.html
-git commit -m "docs: $(date '+%Y-%m-%d') 学习日记"
+git commit -m "docs: $(date '+%Y-%m-%d') learning diary"
 git push user main
 ```
 
-### 步骤 7: 启用 GitHub Pages
+### Step 7: Enable GitHub Pages
 
-1. 进入用户的 fork 仓库
+1. Go to user's forked repo
 2. Settings → Pages
 3. Source: Deploy from a branch
 4. Branch: main, folder: / (root)
-5. 保存，等待部署
+5. Save, wait for deployment
 
-## 每日日记内容模板
+## Daily Diary Content Template
 
-推送到仓库的内容格式：
+Content format to push:
 
 ```html
-<!-- 日期导航 -->
+<!-- Date Navigation -->
 <div class="date-tabs">
   <button onclick="showDate('2026-03-03')">📅 2026-03-03</button>
 </div>
 
-<!-- 每日内容 -->
+<!-- Daily Content -->
 <div class="screen" id="screen-2026-03-03">
   <div class="entry">
     <div class="entry-bar">
@@ -140,40 +148,40 @@ git push user main
     </div>
     <div class="entry-body">
       <div class="quote-box">
-        <div class="quote-title">💡 今日学习</div>
-        <p>今天的学习内容...</p>
+        <div class="quote-title">💡 Today's Learning</div>
+        <p>Today's learning content...</p>
       </div>
     </div>
   </div>
 </div>
 ```
 
-## 隐私保护（必须遵守）
+## Privacy Protection (MUST FOLLOW)
 
-**严格禁止泄露：**
-- 用户真实姓名、身份证号、手机号
-- 用户密码、API Key、Token
-- 用户私人对话内容
+**Strictly prohibit leaking:**
+- User's real name, ID card, phone number
+- User's password, API Key, Token
+- User's private conversation content
 
-**操作原则：**
-- 所有内容必须用户同意才能发布
-- 不确定时先询问用户
+**Operating principles:**
+- All content must be published with user consent
+- When uncertain, ask user first
 
-## 配置项
+## Configuration
 
-| 配置项 | 说明 | 获取方式 |
-|--------|------|----------|
-| FORK_URL | 用户 fork 的仓库 | 用户提供 |
-| GITHUB_TOKEN | GitHub PAT | 用户创建 |
-| CRON_SCHEDULE | 定时任务时间 | 默认 UTC 1:00 |
+| Config | Description | How to Get |
+|--------|-------------|------------|
+| FORK_URL | User's forked repo | User provides |
+| GITHUB_TOKEN | GitHub PAT | User creates |
+| CRON_SCHEDULE | Task schedule | Default UTC 1:00 |
 
-## 检查清单
+## Checklist
 
-完成设置后，确认以下事项：
-- [ ] 用户已 fork 仓库
-- [ ] 获取到 fork URL
-- [ ] 修改了 index.html 个性化内容（替换 🦞）
-- [ ] 获取到 GitHub Token
-- [ ] 配置了每日定时任务
-- [ ] GitHub Pages 已启用
-- [ ] 测试推送成功
+After setup, confirm:
+- [ ] User forked repo
+- [ ] Got fork URL
+- [ ] Modified index.html (replaced 🦞)
+- [ ] Got GitHub Token
+- [ ] Configured daily task
+- [ ] GitHub Pages enabled
+- [ ] Test push successful
