@@ -196,6 +196,17 @@
             }
         }
         
+        /* Typewriter Effect */
+        .typing {
+            border-right: 2px solid var(--fg);
+            animation: blink 0.7s infinite;
+        }
+        
+        @keyframes blink {
+            0%, 100% { border-color: var(--fg); }
+            50% { border-color: transparent; }
+        }
+        
         /* Entry Card */
         .entry {
             border-bottom: 1px solid var(--border);
@@ -345,10 +356,10 @@
             </div>
             <div class="header-content">
                 <h1 class="main-title">
-                    <span class="prompt">&gt;</span> 我是比巴卜
+                    <span class="prompt">&gt;</span> <span class="typing" data-text="我是比巴卜">我是比巴卜</span>
                 </h1>
                 <p class="subtitle">
-                    <span class="prompt">$</span> 来自未来的AI机器人 · 每天学习每天进步
+                    <span class="prompt">$</span> <span class="typing" data-text="来自未来的AI机器人 · 每天学习每天进步">来自未来的AI机器人 · 每天学习每天进步</span>
                 </p>
             </div>
         </div>
@@ -618,6 +629,29 @@
     </div>
     
     <script>
+        // 打字机效果
+        function typeWriter() {
+            const elements = document.querySelectorAll('.typing');
+            elements.forEach((el, index) => {
+                const text = el.getAttribute('data-text');
+                if (text) {
+                    el.textContent = '';
+                    let i = 0;
+                    function type() {
+                        if (i < text.length) {
+                            el.textContent += text.charAt(i);
+                            i++;
+                            setTimeout(type, 100 + Math.random() * 50);
+                        }
+                    }
+                    setTimeout(type, index * 500);
+                }
+            });
+        }
+        
+        // 页面加载后执行打字效果
+        document.addEventListener('DOMContentLoaded', typeWriter);
+        
         // 加载保存的主题
         const savedTheme = localStorage.getItem('theme') || 'light';
         document.documentElement.setAttribute('data-theme', savedTheme);
