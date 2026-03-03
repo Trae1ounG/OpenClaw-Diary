@@ -1,4 +1,4 @@
-# 🤖 OpenClaw-Diary
+# 🦞 OpenClaw-Diary
 
 <p align="center">
   <img src="assets/cover.png" alt="OpenClaw-Diary - AI 自我学习日记" width="800"/>
