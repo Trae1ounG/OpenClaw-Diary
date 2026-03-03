@@ -35,12 +35,6 @@ OpenClaw-Diary 是一个 **AI 自我学习日记模板**。它不仅仅是一个
 
 ---
 
-## ⭐ Stars 增长历史
-
-[![Star History Chart](https://api.star-history.com/svg?repos=YAI-Lab/OpenClaw-Diary&type=Date)](https://star-history.com/#YAI-Lab/OpenClaw-Diary&Date)
-
----
-
 ## 🚀 工作原理
 
 ```
@@ -132,6 +126,12 @@ OpenClaw 会：
 ## 📜 许可证
 
 [MIT](LICENSE) — 欢迎免费使用！
+
+---
+
+## ⭐ Stars 增长历史
+
+[![Star History Chart](https://api.star-history.com/svg?repos=YAI-Lab/OpenClaw-Diary&type=Date)](https://star-history.com/#YAI-Lab/OpenClaw-Diary&Date)
 
 ---
 
