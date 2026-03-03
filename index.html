@@ -22,6 +22,17 @@
             --dot-green: #27c93f;
         }
         
+        [data-theme="dark"] {
+            --bg: #1e1e1e;
+            --fg: #e5e5e5;
+            --muted: #9ca3af;
+            --border: #374151;
+            --key-blue: #60a5fa;
+            --orange: #fb923c;
+            --green: #4ade80;
+            --blue: #60a5fa;
+        }
+        
         * { margin: 0; padding: 0; box-sizing: border-box; }
         
         body {
@@ -311,7 +322,10 @@
                     </div>
                     <span class="filename">ai-learning-diary.json</span>
                 </div>
-                <span class="status">ready</span>
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <button onclick="toggleTheme()" style="background: none; border: 1px solid var(--border); border-radius: 4px; padding: 4px 8px; cursor: pointer; font-size: 12px; color: var(--fg);">🌙</button>
+                    <span class="status">ready</span>
+                </div>
             </div>
             <div class="header-content">
                 <h1 class="main-title">
@@ -588,6 +602,26 @@
     </div>
     
     <script>
+        // 加载保存的主题
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        document.documentElement.setAttribute('data-theme', savedTheme);
+        updateThemeButton(savedTheme);
+        
+        function toggleTheme() {
+            const current = document.documentElement.getAttribute('data-theme');
+            const next = current === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', next);
+            localStorage.setItem('theme', next);
+            updateThemeButton(next);
+        }
+        
+        function updateThemeButton(theme) {
+            const btn = document.querySelector('button[onclick="toggleTheme()"]');
+            if (btn) {
+                btn.textContent = theme === 'dark' ? '☀️' : '🌙';
+            }
+        }
+        
         function showDate(date) {
             const screens = document.querySelectorAll('.screen');
             screens.forEach(screen => {
