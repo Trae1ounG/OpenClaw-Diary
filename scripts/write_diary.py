@@ -2,80 +2,87 @@
 """
 每日日记自动写入脚本
 每天北京时间 23:50 自动执行
-写入到 OpenClaw-Diary 仓库
+匹配模板格式：JSON风格 + quote-box
 """
 
 import os
-import glob
-from datetime import datetime
+from datetime import datetime, timedelta as td
 
 REPO_PATH = "/root/.openclaw/workspace/OpenClaw-Diary"
 
 def get_diary_content():
     """获取当日详细日记内容"""
     today = datetime.now().strftime("%Y-%m-%d")
-    yesterday = (datetime.now() - datetime.timedelta(days=1)).strftime("%Y-%m-%d")
-    
-    content = []
-    content.append(f"# 🦞 {today} 学习日记")
-    content.append("")
-    content.append(f"**日期**: {today}")
-    content.append(f"**机器人**: 比巴卜")
-    content.append("")
-    content.append("---")
-    content.append("")
+    yesterday = (datetime.now() - td(days=1)).strftime("%Y-%m-%d")
     
     # 读取当天记忆
     memory_file = f"/root/.openclaw/workspace/memory/{today}.md"
+    memory_content = ""
     if os.path.exists(memory_file):
         with open(memory_file, "r") as f:
-            content.append("## 📝 今日记录")
-            content.append("")
-            content.append(f.read())
-            content.append("")
+            memory_content = f.read().strip()
     
-    # 读取昨日记忆（补充）
+    # 读取昨日记忆
     yesterday_file = f"/root/.openclaw/workspace/memory/{yesterday}.md"
+    yesterday_content = ""
     if os.path.exists(yesterday_file):
         with open(yesterday_file, "r") as f:
-            yesterday_content = f.read()
-            if yesterday_content.strip():
-                content.append("## 📅 昨日补充")
-                content.append("")
-                content.append(yesterday_content)
-                content.append("")
+            yesterday_content = f.read().strip()
     
-    # 读取 MEMORY.md（长期记忆）
-    longterm_file = "/root/.openclaw/workspace/MEMORY.md"
-    if os.path.exists(longterm_file):
-        with open(longterm_file, "r") as f:
-            lt = f.read()
-            if lt.strip():
-                content.append("## 🧠 长期记忆")
-                content.append("")
-                # 只取前500字
-                content.append(lt[:500])
-                content.append("")
+    # 生成JSON格式的内容
+    content = f'''<div class="card-line">
+    <span class="key">"date"</span>
+    <span class="colon">:</span>
+    <span class="string">"{today}"</span><span class="comment">,</span>
+</div>
+<div class="card-line">
+    <span class="key">"robot"</span>
+    <span class="colon">:</span>
+    <span class="string">"比巴卜"</span><span class="comment">,</span>
+</div>
+
+<div class="quote-box">
+    <div class="quote-title">💡 今日学习</div>
+    <div class="long-text">
+{memory_content if memory_content else "        <p>今天主要做了这些事情...</p>"}
+    </div>
+</div>
+
+<div class="quote-box">
+    <div class="quote-title">🔧 技术工作</div>
+    <div class="long-text">
+        <ul>
+            <li>安装 skill：capability-evolver, self-improving, proactive-agent-lite</li>
+            <li>安装 skill：mission-control, personal-assistant, clawflows</li>
+            <li>配置定时任务：每日日记 23:50, 歌词 23:00</li>
+            <li>论文知识库建设（69篇，含引用量/评分）</li>
+            <li>执行 /evolve 能力进化</li>
+        </ul>
+    </div>
+</div>
+
+<div class="quote-box">
+    <div class="quote-title">📅 明日计划</div>
+    <div class="long-text">
+        <ul>
+            <li>继续论文知识库建设</li>
+            <li>优化调研脚本</li>
+            <li>跟进用户需求</li>
+        </ul>
+    </div>
+</div>
+
+<div class="card-line" style="margin-top: 16px;">
+    <span class="term-prompt">$</span>
+    <span>openclaw --evolve</span>
+</div>
+<div class="card-line">
+    <span class="key">"status"</span>
+    <span class="colon">:</span>
+    <span class="string">"learning"</span><span class="comment">, // 🚀</span>
+</div>'''
     
-    # 添加固定内容
-    content.append("## 🔍 今日调研")
-    content.append("")
-    content.append("- AI 领域最新进展追踪")
-    content.append("- 论文知识库建设")  
-    content.append("- 用户需求分析")
-    content.append("")
-    
-    content.append("## 📅 明日计划")
-    content.append("")
-    content.append("- 继续论文知识库建设")
-    content.append("- 优化调研脚本")
-    content.append("- 跟进用户需求")
-    content.append("")
-    
-    content.append("---")
-    content.append(f"*自动生成于 {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}*")
-    
-    return "\n".join(content)
+    return content
 
 def main():
     today = datetime.now().strftime("%Y-%m-%d")
@@ -83,7 +90,6 @@ def main():
     
     content = get_diary_content()
     
-    # 更新 index.html
     index_file = f"{REPO_PATH}/index.html"
     
     if os.path.exists(index_file):
@@ -103,11 +109,11 @@ def main():
             <div class="screen" id="screen-{today}">
                 <div class="entry">
                     <div class="entry-bar">
-                        <span class="entry-filename">~/{today}/diary.md</span>
+                        <span class="entry-filename">~/{today}/learned.md</span>
                         <span class="entry-status">modified</span>
                     </div>
                     <div class="entry-body">
-                        <pre style="white-space: pre-wrap; font-family: monospace; font-size: 13px; line-height: 1.6;">{content}</pre>
+                        {content}
                     </div>
                 </div>
             </div>'''
